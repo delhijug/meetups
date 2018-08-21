@@ -1,3 +1,5 @@
+![Logo](https://github.com/delhijug/jugdelhi.org/blob/master/wp-content/assets/JUGLogoFullCropped.png)
+
 # meetups
 This repository holds the slides and documents that we have shown/presented during the meetup
 

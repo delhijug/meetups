@@ -1,0 +1,1810 @@
+
+Deep Dive design pattern with java
+-----------------------------------
+	=> Understanding abs, encapsulation
+	=> When to go for interface, when to go for abstract class?
+	=> What and Why design pattern
+	=> loose coupling and high cohesion, using interface, 
+	composition, aggrigation, inheritance, basic of uml
+ 
+	=> Design Principles (SOLID)
+
+	=> GOF Pattern categories
+
+	=>selected design pattern
+
+	=> Creational Patterns
+		Singleton
+		Factory Method
+		Builder
+	=> Structural Patterns
+		Adapter
+		Decorator
+		Facade Pattern
+		Proxy
+	=> Behavioral Patterns
+		Iterator
+		Strategy
+		Observer
+		Chain of Responsibility
+		Template Method
+
+	
+
+
+
+Understanding Abstraction & encapsulation:
+------------------------------------------
+
+ class Cat {
+	private String regId;
+	private String ownerName;
+	private int numberOfBonesFractured;
+	private String deseaseHistory;
+	private	double consultancyFee;
+	
+	String name;
+	String favouriteFood;
+	Date dob;	
+}
+
+
+Understanding Abstraction:
+----------------------
+
+Need of Method abst:
+---------------------
+class StackImpUsingArray {
+	private int x[];
+	private final int SIZE;
+	private int top;
+	
+	public StackImpUsingArray(int size) {
+		this.SIZE=size;
+		x=new int[SIZE];
+		top=-1;
+		
+	}
+	
+	
+	public void push(int element){
+		if(top==SIZE-1)
+			return ;
+		else
+			x[++top]=element;
+	}
+	
+	
+	public int pop(){
+		if(top==-1)
+			return -99;
+		else
+			return x[top--];
+	}
+}
+
+
+
+
+ When to go for interface, when to go for abstract class?
+------------------------------------------------------------
+
+=> interface break the hierarchy
+-------------------------------------------------
+
+		Rotate
+		|
+         ----------------------------
+         |                |
+	Top		Tyre
+	
+
+class Top{
+	public void play(){
+		System.out.println("kids play top and enjoy....");
+	}
+}
+
+class Tyre{
+	public void move(){
+		System.out.println("Tyre move vehical...");
+	}
+}
+
+
+
+
+
+
+interface Rotatable{
+	public void rotate();
+}
+
+
+
+=> interface improve oo design
+------------------------------
+
+class Bird{
+	void sound(){
+		System.out.println("bird sound");
+	}
+	void swimm(){
+		System.out.println("default swimming.....");
+	}
+	void fly(){
+		System.out.println("Default flying....");
+	}
+}
+
+class Eagle extends Bird{
+	
+}
+
+class Emu extends Bird{
+	
+}
+
+class Duck extends Bird{
+	
+}
+
+
+composition, aggrigation, inheritance
+--------------------------------------
+relationship bw the objects:-
+
+IS-A
+HAS-A
+USE-A
+
+FAVOUR COMPOSITION OVER INHERITANCE? WHAT ITS MEAN?
+
+
+loose coupling and high cohesion,design as per interface
+-------------------------------------------------
+
+	Simple case study!
+
+	"A passanger is using metro to travel from Laxmi Nagar to Noida"
+
+
+
+
+class Metro{
+	public void move(String source, String desination){
+		System.out.println("moving from " + source+ " to " + desination);
+	}
+}
+
+class Passanger{
+	private String passangerName;
+	public Passanger(String passangerName) {
+		this.passangerName = passangerName;
+	}
+
+
+	public void travel(Metro metro,String source, String desination ){
+		System.out.println("Passanger name: "+ passangerName);
+		metro.move(source, desination);
+	}
+}
+public class Demo {
+	public static void main(String[] args) {
+		
+		Metro metro=new Metro();
+		Passanger passanger=new Passanger("amit");
+		passanger.travel(metro, "Laxmi nagar", "noida");
+	}
+
+}
+
+
+favour composition over inheritance
+-----------------------------------
+	=> square rectangle liskov java
+
+class Rectangle{
+	private int l, b;
+
+	public int getL() {
+		return l;
+	}
+
+	public void setL(int l) {
+		this.l = l;
+	}
+
+	public int getB() {
+		return b;
+	}
+
+	public void setB(int b) {
+		this.b = b;
+	}
+
+	public Rectangle(int l, int b) {
+		this.l = l;
+		this.b = b;
+	}
+	
+	public int calculateArea(){
+		return l*b;
+	}
+	
+}
+
+class Square extends Rectangle{
+	public Square(int l){
+		super(l, l);
+	}
+}
+
+
+What and Why design pattern
+-------------------------
+
+	=> tried and tested solutions to work with
+
+	=> language neutral and so can be applied to any OO language
+
+	=>proven track record as they are already widely used and thus reduce 
+	the technical risk to the project
+
+	=>highly flexible and can be used in practically 
+		any type of application or domain
+
+
+
+
+
+
+
+
+
+
+Design Principles (SOLID)
+---------------------------
+
+        Single Responsibility Principle
+	Open Close Principle
+	Liskov's Substitution Principle
+	Dependency Inversion Principle
+	Interface Segregation Principle
+	
+
+
+Understanding SRP
+-------------------
+class Book {
+	private int id;
+	private String isbn;
+	private String title;
+	private String author;
+	private double price;
+	
+	public Connection  getConnection(){
+		// code to get jdbc connection..
+		return null;
+	}
+
+	public SessionFactory  getFactory(){
+		// code to get jdbc connection..
+		return null;
+	}
+	public void addBook(Book book)throws SQLException{
+		System.out.println("adding book to db using jdbc..");
+	}
+       public void addBookUsingHibernate(Book book)throws HibernateException{
+		System.out.println("adding book to db using hibernate....");
+	}
+}
+
+
+
+
+
+
+public interface BookDao {
+		public List<Book> getAllBooks();
+		public Book getBookById(int bookId);
+		public void addBook(Book book);
+		public void updateBook(Book book);
+		public void removeBook(int bookId);
+}
+
+
+
+
+
+
+mysql -u root -p
+use  d_jug;
+
+create table Book (id integer not null auto_increment, author varchar(255), isbn varchar(255), price double precision not null, title varchar(255), primary key (id));
+
+insert into Book (author, isbn, price, title) values ('raj', 'abc121', 4455.8, 'java head first');
+
+
+
+con=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/d_jug","root","root");
+			stmt=con.prepareStatement("insert into Book (author, isbn, price, title) values (?, ?, ?, ?)");
+			stmt.setInt(1, "raja");
+			stmt.setString(2, "abc121");
+			stmt.setDouble(3, 3333.6);
+			stmt.setString(2, "java head first");
+			stmt.executeUpdate();
+
+
+
+
+db.properties
+-------------------
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/UserDB
+user=root
+password=root
+
+
+
+Create an connection factory
+-------------------------
+
+
+package com.daniel.util;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class DbUtil {
+
+    private static Connection connection = null;
+
+    public static Connection getConnection() {
+        if (connection != null)
+            return connection;
+        else {
+            try {
+                Properties prop = new Properties();
+
+                InputStream inputStream = DbUtil.class.getClassLoader().getResourceAsStream("db.properties");
+
+                prop.load(inputStream);
+                String driver = prop.getProperty("driver");
+                String url = prop.getProperty("url");
+                String user = prop.getProperty("user");
+                String password = prop.getProperty("password");
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return connection;
+        }
+
+    }
+}
+
+
+
+GOF Pattern categories
+---------------------------------
+  ==> GOF, 23 patterns
+   ==> Classification patterns: 
+
+	Creational
+	Structural
+	Behavioral
+
+
+
+Creational Pattern
+-------------------
+
+	==> What is the best way to create object?
+
+	==> Creational Pattern
+
+		=>Singleton
+		=>Factory Method
+		=>Builder
+
+structural patterns 
+--------------------
+
+	==> Structural Patterns describe how objects and 
+		classes can be combined to form larger structures
+
+	==> class patterns vs object patterns
+
+	==> The difference between class patterns and object patterns is that 
+		class patterns describe abstraction with the help of inheritance
+		and how it can be used to provide more useful program interface. 
+
+	==> Object patterns, on other hand, describe how objects can
+		 be associated and composed to form larger, more complex structures
+
+	
+	==> structural patterns 
+
+		=> Adapter Pattern
+		=> Decorator Pattern :io
+		=> Facade Pattern 
+		=> Proxy Pattern
+
+
+
+Behavioral Patterns
+------------------
+
+	==> Behavioural patterns are those which are concerned with 
+		interactions between the objects.
+
+	==> The interactions between the objects should be such that they 
+	  are talking to each other and still are loosely coupled. 
+
+
+	==> The loose coupling is the key to n-tier architectures. 
+		In this, the implementation and the client should be loosely 
+		coupled in order to avoid hard-coding and dependencies.
+
+	==> Behavioral Patterns
+		=> Strategy Pattern
+		=> Chain of Responsibility Pattern
+		=> Iterator Pattern
+		=> Observer Pattern 
+		=> Template Pattern
+
+
+
+	Singleton Pattern
+	===================
+
+	" one object per application" ex logging , db connection etc
+
+	=> lazy vs eager
+	=> threading issue, double locking
+	=> What if clonned
+	=> What if deserilized?
+	=> What if used java reflection?
+	=> what if 2 class loader load that class twice
+	=> best practices, effective java
+	=> using enum
+
+	Attempt 1:
+	
+
+	class SingletonObject {
+
+		private static SingletonObject singletonObject;
+
+		private SingletonObject() {}
+
+		public static SingletonObject getSingletonObject() {
+			if (singletonObject == null) {
+				singletonObject = new SingletonObject();
+			}
+			return singletonObject;
+		}
+
+	}
+
+	Attempt 2: What about race condition?
+
+	
+	class SingletonObject  {
+
+		private static SingletonObject singletonObject;
+
+		private SingletonObject() {}
+
+		public static synchronized SingletonObject getSingletonObject() {
+			if (singletonObject == null) {
+				singletonObject = new SingletonObject();
+			}
+			return singletonObject;
+		}
+
+	}
+
+	Attempt 3: What if somebody make clone of Singleton object?
+
+	
+	class SingletonObject  implements Cloneable {
+
+		private static SingletonObject singletonObject;
+
+		private SingletonObject() {}
+
+		public static synchronized SingletonObject getSingletonObject() {
+			if (singletonObject == null) {
+				singletonObject = new SingletonObject();
+			}
+			return singletonObject;
+		}
+
+		public Object clone() throws CloneNotSupportedException {
+			throw new CloneNotSupportedException();
+		}
+
+	}
+
+
+
+	Attempt 4: Double locking
+		This optimization consist in checking in an unsynchronized block if
+		 the object is null and if not to check again and create it in an syncronized block. 
+		This is called double locking mechanism
+	
+	class SingletonObject  implements Cloneable {
+
+		private static SingletonObject singletonObject;
+
+		private SingletonObject() {}
+
+		public static  SingletonObject getSingletonObject() {
+
+			if (singletonObject == null){
+			synchronized(SingletonObject.class)
+			{
+				if (singletonObject== null)
+				{
+					System.out.println("getInstance(): First time getInstance was invoked!");
+					instance = new Singleton();
+				}
+			}            
+		}
+
+		return singletonObject;
+
+
+		}
+
+		public Object clone() throws CloneNotSupportedException {
+			throw new CloneNotSupportedException();
+		}
+
+	}
+
+	What if used reflection to create an object:
+	--------------------------------------------
+		Constructor[] constructors=SingletonObject.class.getDeclaredConstructors();
+		constructors[0].setAccessible(true);
+		SingletonObject s2=(SingletonObject) constructors[0].newInstance();
+
+
+	What if serialization is done?
+
+	protected Object readResolve() {
+   		 return getInstance();
+	}
+
+
+
+	Prototype Pattern (best practics for creating clone)
+	===================================================
+
+		=> About creating clone of an object
+
+		=> Why clonning? cloning of an object to avoid creation
+
+		=> If the cost of creating a new object is large and creation 
+			is resource intensive, we clone the object
+
+		=> We use the interface Cloneable and call its method clone() to clone the 			
+			object
+
+		=> Deep copy vs shallow copy
+
+		=> Shallow copying generally means copying only one level of an object,
+		 while deep copying generally means copying more than one level
+
+
+	Ex:
+
+	
+//about what is the best practice to create clone of an object?
+
+  class Employee implements Cloneable {
+	private Integer id;
+	private String name;
+	private Date hireDay;//mutable
+
+	public Employee(Integer id, String name, Date date) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.hireDay=date;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", hireDay=" + hireDay
+				+ "]";
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		 // call Object.clone()
+		 Employee cloned = (Employee) super.clone();
+
+		// clone mutable fields
+		 cloned.hireDay = (Date) hireDay.clone();
+
+		 return cloned;
+	}
+
+	public void changeHireDay(int year, int month, int day){
+		 hireDay.setDate(day);
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getHireDay() {
+		return hireDay;
+	}
+
+	public void setHireDay(Date hireDay) {
+		this.hireDay = hireDay;
+	}
+	
+	
+}
+
+public class Demo {
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Date date=new GregorianCalendar(2001, 11, 22).getTime();
+		
+		Employee employee1 = new Employee(33, "raja", date);
+	
+		Employee employee2 = (Employee) employee1.clone();
+	
+		System.out.println(employee1);
+		System.out.println(employee2);
+		
+		System.out.println("After changing............");
+		employee1.changeHireDay(2011, 11, 11);
+		employee1.setName("amit");
+		System.out.println(employee1);
+		System.out.println(employee2);
+
+	}
+
+}
+
+
+Builder Pattern
+================
+
+	==> The Builder pattern can be used to ease the construction 
+	   of a complex object from simple objects
+
+	public class Food {
+		private String name;
+		private int unit;
+		private int vitC;
+		private int vitA;
+		private int vitB12;
+		private int vitB5;
+		private int vitD;
+
+		//
+		
+	}
+		
+	public class FoodBuilder {
+	
+		private String name;
+		private int unit;
+		private int vitC=100;
+		private int vitA=100;
+		private int vitB12=100;
+		private int vitB5=100;
+		private int vitD=5000;
+		public FoodBuilder(String name, int unit) {
+			super();
+			this.name = name;
+			this.unit = unit;
+		}
+		
+		
+		public Food build(){
+			return new Food(name, unit, vitC, vitA, vitB12, vitB5, vitD);
+		}
+	
+	
+		public FoodBuilder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+	}
+
+	public class DemoBuilder {
+	
+		public static void main(String[] args) {
+			Food food=new FoodBuilder("apple", 400).setVitA(5000).build();
+		}
+	}
+
+	
+	Factory Method
+	===============
+	Defind an interface for creating an object, but let subclass decide which object to instantiate, 
+		Factory method let a class defer instantiation to subclass using inheritance
+
+	=> provide an interface for creating an oblject here do not consider the word interface as java interface. 
+	It simply mean to provides a contract / method to create an object
+
+	=> let the subclass decide what exact object ot instantiate- This pattern involve "inheritance"
+
+
+	=>Calendar calendar = Calendar.getInstance();
+		System.out.println(calendar);
+
+	=> createStatement() of java.sql.Connection interface
+
+	=> createSocket() of java.rmi.server.RmiClientSocketFactory
+
+
+
+db.properties
+-------------------
+
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/bookapp
+user=root
+password=root
+
+
+
+
+Create an connection factory
+-------------------------
+
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class ConnectionFactory{
+
+    private static Connection connection = null;
+
+    public static Connection getConnection() {
+        if (connection != null)
+            return connection;
+        else {
+            try {
+                Properties prop = new Properties();
+		//FileInputStream in = new FileInputStream
+                InputStream inputStream = ConnectionFactory.class.getClassLoader().getResourceAsStream("db.properties");
+
+                prop.load(inputStream);
+                String driver = prop.getProperty("driver");
+                String url = prop.getProperty("url");
+                String user = prop.getProperty("user");
+                String password = prop.getProperty("password");
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return connection;
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+structural patterns 
+==========================
+		=> Adapter Pattern
+		=> Decorator Pattern :io
+		=> Facade Pattern 
+		=> Proxy Pattern
+
+
+Adapter Pattern
+================
+	==> It helps in integrating two modules with different incompatible interfaces. 
+	==> The Adapter pattern is used so that two unrelated interfaces can work together
+	==> The joining between them is called an Adapter. 
+	==> This is something like we convert interface of one class into interface expected by the client. 
+	==>  Way to implement adaper
+		=> Using inheritance: A class adapter 
+		=> User composition: An object adapter
+
+	Use cases:
+	----------
+	1. Most important task of an Adapter is to transfer data between applications or modules.
+	2. Very common task is to parse the information from one kind to the other
+	3. Convert from one type to the other
+	4. Some times adapters even validate the data so that right data flows into the application 
+	from external applications.
+
+	=> Having adapters help in keeping the conversion code separate so that the parsing functionality
+	 is not leaking into the core modules of our application.
+
+	=> Another important advantage of having an adapter is that when there is a 
+	change in outside interface, our core modules does not get affected. 
+	Only adapters need to be modified. So, this helps in restricting the changes to 
+	 adapter module alone and rest of application does not get affected. 
+
+
+
+
+	Convert the interface of a class into another interface clients expect. 
+	Adapter lets classes work together that couldn't otherwise because of incompatible interfaces.
+
+
+	Adapter Pattern hello world:
+	----------------------------
+	public class RoundPeg {
+		public void insertTohole(String str) {
+			System.out.println("roundpeg insertTohole(): " + str);
+		}
+	}
+
+	public class SquarePeg {
+		public void insert(String str) {
+			System.out.println("SquarePeg insert(): " + str);
+		}
+	}
+
+
+
+	// adaptoing roundpeg to square pag
+	public class PegAdaptor extends SquarePeg  {
+	
+		private RoundPeg peg;
+	
+		public PegAdaptor(RoundPeg peg) {
+			super();
+			this.peg = peg;
+		}
+		
+		public void insert(String str) {
+			peg.insertTohole(str);
+		}
+	}
+
+
+
+//adaptoing roundpeg to square pag
+public class Demo {
+
+	public static void main(String[] args) {
+		
+		RoundPeg peg=new RoundPeg();
+		PegAdaptor adpt=new PegAdaptor(peg);
+		adpt.insert("hello");
+	}
+}
+
+Examples:
+---------
+java.util.Arrays#asList()
+java.io.InputStreamReader(InputStream) (returns a Reader)
+java.io.OutputStreamWriter(OutputStream) (returns a Writer)
+
+
+
+
+decorator pattern / wrapper pattern 
+=================================
+
+	=> Decorator pattern helpful in adding behaviour to objects statically or dynamically.
+
+	=> Decorator pattern helps in extending the functionality of the objects without
+	 effecting the behaviour of other objects.
+
+	=> Decorator adhering to the design principle of Open for extension and closed for modification
+
+	=> In the Decorator pattern, a decorator object is wrapped around the original object
+
+ 	=> This is typically achieved having the original object as a member
+		 of the decorator, with the decorator forwarding the 
+		requests to the original object and also implementing the new functionality
+
+	==> The decorator must conform to the interface of the original object
+		 (the object being decorated) 
+
+
+	=> Simple greet application:
+	---------------------------------
+
+	Car-> BasicCar-> SportCar->SuperSportCar
+		
+	
+	interface Car{
+		public String assemble();
+	}
+	class BasicCar implements Car{
+	
+		@Override
+		public String assemble() {
+			return "basic car";
+		}
+		
+	}
+	abstract class CarDecorator implements Car{
+		private Car car;
+		public CarDecorator(Car car) {
+			this.car = car;
+		}
+		
+		@Override
+		public String assemble() {
+			return car.assemble();
+		}
+	}
+	class SportCar extends CarDecorator{
+	
+		public SportCar(Car car) {
+			super(car);
+		}
+	
+		@Override
+		public String assemble() {
+			return super.assemble()+" with sport feature";
+		}
+	}
+	
+	class SuperSportCar extends CarDecorator{
+	
+		public SuperSportCar(Car car) {
+			super(car);
+		}
+	
+		@Override
+		public String assemble() {
+			return super.assemble()+" with extra super sport feature";
+		}
+	}
+
+
+
+SuperSportCar sportCar=new SuperSportCar(new SportCar(new BasicCar()));
+
+proxy design pattern:
+------------------
+	=> Provide a surrogate or placeholder for another object to control access to it
+
+	public class Magician {
+	
+		public void doMagic(){
+			System.out.println("abra ka dabra...");
+		}
+	}
+
+
+	public class AudianceAdvice {
+	
+		public void clapping(){
+			System.out.println("maza aa gaya...");
+		}
+	}
+
+
+
+	@Aspect
+	@Component
+	public class AudianceAdvice {
+		@Before("execution(public void doMagic())")
+		public void clapping(){
+			System.out.println("maza aa gaya...");
+		}
+	}
+
+
+Example RMI:
+=============
+
+
+
+RMI server
+-------------
+
+public interface AtmCard extends Remote {
+
+	public boolean isValid(String card)throws RemoteException;
+}
+
+
+
+
+
+public class AtomCardImp extends UnicastRemoteObject implements AtmCard,
+		Serializable {
+
+	protected AtomCardImp() throws RemoteException {
+		super();
+	}
+
+	@Override
+	public boolean isValid(String card) throws RemoteException {
+		Integer val = Integer.parseInt(card);
+		if (val % 2 == 0)
+			return false;
+		else
+			return true;
+	}
+
+}
+
+
+
+public class Server {
+	public static void main(String[] args) throws RemoteException, AlreadyBoundException {
+		AtomCardImp obj=new AtomCardImp();
+		
+		Registry registry=LocateRegistry.createRegistry(222);//pass port no
+		registry.bind("obj", obj);
+		System.out.println("service is bound!");
+		
+	}
+
+}
+
+
+
+RMI Client
+-------------
+
+
+public interface AtmCard extends Remote {
+
+	public boolean isValid(String card)throws RemoteException;
+}
+
+
+
+public class RMIClient {
+	public static void main(String[] args) throws RemoteException, NotBoundException {
+		Registry registry=LocateRegistry.getRegistry("localhost", 222);
+		AtmCard card=(AtmCard) registry.lookup("obj");
+		
+		System.out.println(card.isValid("121"));
+		
+	}
+
+}
+
+
+
+	 
+
+Behavioral Patterns
+=======================
+		=> Strategy Pattern
+		=> Iterator Pattern
+		=> Observer Pattern 
+		=> Chain of Responsibility Pattern
+		=> Template Pattern
+
+
+
+
+Strategy Pattern
+-----------------
+	=>The strategy pattern is intended to provide a means to define a family of algorithms,    		encapsulate each one as an object, and make them interchangeable select algo at run time 		convert IS-A to HAS-A
+
+	=> It separate algorithms into classes that can be plugged in at runtime.
+ 
+	=> I need to provide discount strategy for code flexibility 
+
+	=> used when we have multiple algorithm for a specific task and client
+	 decides the actual implementation to be used at runtime.
+
+
+Designing shopping cart :
+------------------------
+
+class Product {
+	private int id;
+	private String name;
+	private double price;
+	private int quantity;
+
+}
+
+interface Discount {
+	public void discount(Product product);
+
+}
+
+// buy 5 get 2 item free
+class BuyXGetYItem implements Discount {
+	private int x;
+	private int y;
+
+	public BuyXGetYItem(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public void discount(Product product) {
+		if(product.getQuantity()>=x){
+			product.setQuantity(product.getQuantity()+product.getQuantity());
+		}
+	}
+}
+
+class BuyXGetYPercentageDiscount implements Discount{
+	private int x;
+	private int y;
+
+	public BuyXGetYPercentageDiscount(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public void discount(Product product) {
+		if(product.getQuantity()>=x){
+			double reducedPrice=(product.getPrice()-product.getPrice()*y/100);
+			product.setPrice(reducedPrice);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+Iterator design pattern:
+------------------------
+
+	=> iterator pattern allows for the traversal through the elements
+	 in a grouping of objects via a standardized interface. 
+
+	=> An Iterator interface defines the actions that can be performed.
+
+	=>  These actions include being able to traverse the objects and also obtain the objects
+
+
+	Example : write our own iterator by implementing java.util.Iterator
+		 hasNext(), next(), and remove() methods
+
+
+
+public class Item {
+
+	String name;
+	float price;
+
+	public Item(String name, float price) {
+		this.name = name;
+		this.price = price;
+	}
+
+	public String toString() {
+		return name + ": $" + price;
+	}
+}
+
+
+
+public class Menu {
+
+	List<Item> menuItems;
+
+	public Menu() {
+		menuItems = new ArrayList<Item>();
+	}
+
+	public void addItem(Item item) {
+		menuItems.add(item);
+	}
+
+	public Iterator<Item> iterator() {
+		return new MenuIterator();
+	}
+
+	class MenuIterator implements Iterator<Item> {
+		int currentIndex = 0;
+
+		@Override
+		public boolean hasNext() {
+			if (currentIndex >= menuItems.size()) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		@Override
+		public Item next() {
+			return menuItems.get(currentIndex++);
+		}
+
+		@Override
+		public void remove() {
+			menuItems.remove(--currentIndex);
+		}
+
+	}
+
+}
+
+
+public class Demo {
+
+	public static void main(String[] args) {
+
+		Item i1 = new Item("mouse", 7.50f);
+		Item i2 = new Item("laptop", 6.00f);
+		Item i3 = new Item("DVD", 6.50f);
+
+		Menu menu = new Menu();
+		menu.addItem(i1);
+		menu.addItem(i2);
+		menu.addItem(i3);
+
+		System.out.println("Displaying Menu:");
+		Iterator<Item> iterator = menu.iterator();
+		while (iterator.hasNext()) {
+			Item item = iterator.next();
+			System.out.println(item);
+		}
+
+		System.out.println("\nRemoving last item returned");
+		iterator.remove();
+
+		System.out.println("\nDisplaying Menu:");
+		iterator = menu.iterator();
+		while (iterator.hasNext()) {
+			Item item = iterator.next();
+			System.out.println(item);
+		}
+
+	}
+
+}
+
+
+Observer design pattern:
+========================
+
+	
+	=> The concept behind the Observer design pattern is the basis 
+		for PubSub, event and non blocking based systems
+	
+	=> It supports the principle of loose coupling between objects that 
+	interact with each other.
+
+	=>  It allows sending data to other objects effectively without any change in the Subject
+	 or Observer classes. Observers can be added/removed at any point in time
+
+	Jdk support for observer design pattern:
+	----------------------------------------
+
+		//observable (news paper wala)
+		
+
+class MySubject extends Observable{
+	
+	private double stockPrice;
+	private String stockName;
+	public MySubject(double stockPrice, String stockName) {
+		super();
+		this.stockPrice = stockPrice;
+		this.stockName = stockName;
+	}
+	public double getStockPrice() {
+		return stockPrice;
+	}
+	public void setStockPrice(double stockPrice) {
+		this.stockPrice = stockPrice;
+		//
+		this.setChanged();
+		this.notifyObservers(new Double(stockPrice));
+	}
+	public String getStockName() {
+		return stockName;
+	}
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+}
+
+class Client implements Observer{
+
+	@Override
+	public void update(Observable o, Object a) {
+		System.out.println("price changed...."+ a );
+	}
+	
+}
+
+
+
+public class Demo {
+	
+	public static void main(String[] args) {
+		MySubject mySubject=new MySubject(300, "Goo");
+		Client c1=new Client();
+		mySubject.addObserver(c1);
+		
+		mySubject.setStockPrice(340);
+	}
+
+}
+
+
+Chain of Responsibility
+-----------------------
+
+	=> used to achieve loose coupling in software design where a request 
+	from client is passed to a chain of objects to process them. 
+
+	=>Then the object in the chain will decide themselves who will 
+	be processing the request and whether the request is 
+	required to be sent to the next object in the chain or not.
+
+	=> ex:  try-catch block
+
+	=> Ex: ATM Dispense machine, 50$, 20$, 10$ etc
+
+
+
+
+public class Currency {
+
+	private int amount;
+	
+	public Currency(int amt){
+		this.amount=amt;
+	}
+	
+	public int getAmount(){
+		return this.amount;
+	}
+}
+
+
+
+public interface DispenseChain {
+
+	void setNextChain(DispenseChain nextChain);
+	
+	void dispense(Currency cur);
+}
+
+
+
+
+public class Dollar50Dispenser implements DispenseChain {
+
+	private DispenseChain chain;
+	
+	@Override
+	public void setNextChain(DispenseChain nextChain) {
+		this.chain=nextChain;
+	}
+
+	@Override
+	public void dispense(Currency cur) {
+		if(cur.getAmount() >= 50){
+			int num = cur.getAmount()/50;
+			int remainder = cur.getAmount() % 50;
+			System.out.println("Dispensing "+num+" 50$ note");
+			if(remainder !=0) this.chain.dispense(new Currency(remainder));
+		}else{
+			this.chain.dispense(cur);
+		}
+	}
+
+}
+
+
+
+
+
+public class Dollar20Dispenser implements DispenseChain{
+
+	private DispenseChain chain;
+	
+	@Override
+	public void setNextChain(DispenseChain nextChain) {
+		this.chain=nextChain;
+	}
+
+	@Override
+	public void dispense(Currency cur) {
+		if(cur.getAmount() >= 20){
+			int num = cur.getAmount()/20;
+			int remainder = cur.getAmount() % 20;
+			System.out.println("Dispensing "+num+" 20$ note");
+			if(remainder !=0) this.chain.dispense(new Currency(remainder));
+		}else{
+			this.chain.dispense(cur);
+		}
+	}
+
+}
+
+
+
+
+public class Dollar10Dispenser implements DispenseChain {
+
+	private DispenseChain chain;
+	
+	@Override
+	public void setNextChain(DispenseChain nextChain) {
+		this.chain=nextChain;
+	}
+
+	@Override
+	public void dispense(Currency cur) {
+		if(cur.getAmount() >= 10){
+			int num = cur.getAmount()/10;
+			int remainder = cur.getAmount() % 10;
+			System.out.println("Dispensing "+num+" 10$ note");
+			if(remainder !=0) this.chain.dispense(new Currency(remainder));
+		}else{
+			this.chain.dispense(cur);
+		}
+	}
+
+}
+
+
+
+//  Creating the Chain
+======================
+public class ATMDispenseChain {
+
+	private DispenseChain c1;
+
+	public ATMDispenseChain() {
+		// initialize the chain
+		this.c1 = new Dollar50Dispenser();
+		DispenseChain c2 = new Dollar20Dispenser();
+		DispenseChain c3 = new Dollar10Dispenser();
+
+		// set the chain of responsibility
+		c1.setNextChain(c2);
+		c2.setNextChain(c3);
+	}
+
+	public static void main(String[] args) {
+		ATMDispenseChain atmDispenser = new ATMDispenseChain();
+		while (true) {
+			int amount = 0;
+			System.out.println("Enter amount to dispense");
+			Scanner input = new Scanner(System.in);
+			amount = input.nextInt();
+			if (amount % 10 != 0) {
+				System.out.println("Amount should be in multiple of 10s.");
+				return;
+			}
+			// process the request
+			atmDispenser.c1.dispense(new Currency(amount));
+		}
+
+	}
+
+}
+
+
+
+template design pattern:
+-------------------------
+http://www.journaldev.com/1763/template-method-design-pattern-in-java
+
+
+	=> Template Method is a behavioral design pattern. 
+
+	=> Template Method design pattern is used to create a method stub and 		
+		deferring some of the steps of implementation to the subclasses.
+
+	=> Template method defines the steps to execute an algorithm and it
+	 can provide default implementation that might be common for all or some of 		
+		the subclasses.
+
+	=> suppose we want to provide an algorithm to build a house. 
+	The steps need to be performed to build a house are 
+	 building foundation, building pillars, building walls and windows.
+
+	=>  The important point is that the we cant change the order of execution
+	 because we can't build windows before building the foundation.
+
+	=> So in this case we can create a template method that will use different methods to build the house
+
+
+
+public abstract class HouseTemplate {
+
+	//template method, final so subclasses can't override
+	public final void buildHouse(){
+		buildFoundation();
+		buildPillars();
+		buildWalls();
+		buildWindows();
+		System.out.println("House is built.");
+	}
+
+	//default implementation
+	private void buildWindows() {
+		System.out.println("Building Glass Windows");
+	}
+
+	//methods to be implemented by subclasses
+	public abstract void buildWalls();
+	public abstract void buildPillars();
+
+	private void buildFoundation() {
+		System.out.println("Building foundation with cement,iron rods and sand");
+	}
+}
+
+
+
+public class WoodenHouse extends HouseTemplate {
+
+	@Override
+	public void buildWalls() {
+		System.out.println("Building Wooden Walls");
+	}
+
+	@Override
+	public void buildPillars() {
+		System.out.println("Building Pillars with Wood coating");
+	}
+
+}
+
+
+
+
+public class GlassHouse extends HouseTemplate {
+
+	@Override
+	public void buildWalls() {
+		System.out.println("Building Glass Walls");
+	}
+
+	@Override
+	public void buildPillars() {
+		System.out.println("Building Pillars with glass coating");
+	}
+
+}
+
+
+
+		HouseTemplate houseType = new WoodenHouse();
+		
+		//using template method
+		houseType.buildHouse();
+		System.out.println("************");
+		
+		houseType = new GlassHouse();
+		
+		houseType.buildHouse();
+
+
+
+	Example in jdk:
+	-----------------
+	=> All non-abstract methods of java.io.InputStream, java.io.OutputStream, java.io.Reader and java.io.Writer.
+
+	=> All non-abstract methods of java.util.AbstractList, java.util.AbstractSet and java.util.AbstractMap.
+
+
+
+
+Strategy Pattern 
+================
+	
+
+
+SOLID
+
+http://cafe.elharo.com/programming/a-square-is-not-a-rectangle/
+
+http://www.cdf.toronto.edu/~csc207h/fall/stg/lectures/eve/w10/
+
+
+http://zeroturnaround.com/rebellabs/object-oriented-design-principles-and-the-5-ways-of-creating-solid-applications/
+http://www.informit.com/store/java-coding-guidelines-75-recommendations-for-reliable-9780321933157
+
+
+
+
+
+
+
+
+=> stock application
+	
+	public interface Observable {
+		public void registerObserver(Observer observer);
+		public void notifyObservers();
+		public void removeObserver(Observer observer);
+	}
+
+
+	public interface Observer {	
+		public void update(Stock stock);
+	}
+
+
+
+
+   public abstract class Stock implements Observable{
+	private List<Observer> observers;
+	
+	public Stock(){
+		observers = new ArrayList<Observer>();
+	}
+	
+	private String name;
+	private int price;
+	
+	public String getStockName(){
+		return name;
+	}
+
+	@Override
+	public void registerObserver(Observer observer) {
+		if(observer != null){
+			this.observers.add(observer);
+		}
+	}
+
+	@Override
+	public void notifyObservers() {
+		Iterator<Observer> it = observers.iterator();
+		while(it.hasNext()){
+			Observer observer = it.next();
+			observer.update(this);
+		}
+	}
+
+	@Override
+	public void removeObserver(Observer observer) {
+		if(observer != null){
+			this.observers.remove(observer);
+		}
+	}
+	
+	public int getStockPrice(){
+		return price;
+	}
+	
+	public void updateStockPrice(int updatedPrice){
+		this.price = updatedPrice;
+		this.notifyObservers();
+	}
+	
+	public void setName(String stockName){
+		this.name = stockName;
+	}
+}
+
+
+	public class Mobile implements Observer{
+		@Override
+		public void update(Stock stock) {
+			System.out.println("MOBILE - The Price of "+stock.getStockName()+" has changed:"+stock.getStockPrice());
+		}
+	}
+
+	
+	public class DisplayBoard implements Observer{
+		@Override
+		public void update(Stock stock) {
+		System.out.println("DISPLAYBOARD - The Price of "+stock.getStockName()+" has changed:"+stock.getStockPrice());
+		}
+	}
+
+	public class IBM extends Stock{
+		public IBM(){
+			this.setName("IBM");
+		}
+	}
+
+	public class Apple extends Stock{
+		public Apple(){
+			this.setName("Apple");
+		}
+	}
+
+
+	public class Microsoft extends Stock{
+		public Microsoft(){
+			this.setName("Microsoft");
+		}
+	}
+
+
+
+
+	
+	public class Exec {
+		public static void main(String[] args) {
+			//Create stocks
+			IBM ibm = new IBM();
+			Microsoft microsoft = new Microsoft();
+			Apple apple = new Apple();
+			
+			//Create Observers
+			Mobile mobile = new Mobile();
+			DisplayBoard displayBoard = new DisplayBoard();
+			
+			//Register Observers for stocks
+			ibm.registerObserver(mobile);
+			ibm.registerObserver(displayBoard);
+			
+			microsoft.registerObserver(mobile);
+			microsoft.registerObserver(displayBoard);
+			
+			apple.registerObserver(mobile);
+			apple.registerObserver(displayBoard);
+			
+			//Set some random stock prices
+			for(int i =0; i<300; i++){
+				ibm.updateStockPrice((int)(Math.random()*101)+1);
+				microsoft.updateStockPrice((int)(Math.random()*101)+1);
+				apple.updateStockPrice((int)(Math.random()*101)+1);
+			}
+			
+		}
+	}
+
+
+
+
+
+
