@@ -1,1 +1,0 @@
-![Logo](https://github.com/delhijug/jugdelhi.org/blob/master/wp-content/assets/JUGLogoFullCropped.png)
